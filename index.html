@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Talk Title</title>
+
+        <meta name="description" content="Opening discussion for Devangel Summit XII." />
+        <meta name="author" content="Rob Spectre" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+
+        <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css" />
+        <link rel="stylesheet" href="bower_components/vis/dist/vis.min.css" />
+        
+        <link rel="stylesheet" href="styles/theme.css" id="theme" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background="#e22228">
+                    <img class="unstyled" src="images/twilio/Twilio_logo_white.png" />
+                    <div class="bio">
+                        <h3>Rob Spectre</h3>
+                        <h4><a href="https://twitter.com/dn0t">@dn0t</a> - <a href="mailto:rob@twilio.com">rob@twilio.com</a></h4> 
+                    </div>
+                    <h2 style="margin-top: 1.5em; color: white;">Title</h2>
+                    <h2 style="color: white;">Subtitle</h2>
+                </section>
+                <section>
+                    <img src="images/twilio/rob-spectre.jpg" />
+                    <h1>Photo Card</h1>
+                </section>
+                <section data-background="#e22228">
+                    <h1 class="headline">Headline Card</h1>
+                </section>
+                <section> 
+                    <h1>Funnel Model</h1>
+                    <div class="fragment chart" id="funnel-chart"></div>
+                    <div class="fragment" id="funnel-chart-add-understanding"></div>
+                    <div class="fragment" id="funnel-chart-add-adoption"></div>
+                    <div class="fragment" id="funnel-chart-add-activation"></div>
+                </section>
+                <section data-background="#2d2c2a">
+                    <h1>Network Chart</h1>
+                    <div class="fragment chart" id="network-chart"></div>
+                    <div class="fragment chart" id="network-chart-add-twilio"></div>
+                    <div class="fragment chart" id="network-chart-add-devangels"></div>
+                    <div class="fragment chart" id="network-chart-activate-devangels"></div>
+                    <div class="fragment chart" id="network-chart-stop-devangels"></div>
+                </section>                
+                <section>
+                    <h1>Youtube Card</h1>
+                    <iframe width="853" height="480" src="//www.youtube.com/embed/aZGn4LncY0g?rel=0&amp;controls=0&amp;showinfo=0&amp;start=10&amp;enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+                </section>
+                <section data-background="#e22228">
+                    <img class="unstyled" src="images/twilio/Twilio_logo_white.png" />
+                    <div class="bio">
+                        <h3>Thank You</h3>
+                        <h4><a href="https://twitter.com/dn0t">@dn0t</a> - <a href="mailto:rob@twilio.com">rob@twilio.com</a></h4> 
+                    </div>
+                    <h2 style="margin-top: 1.5em; color: white;">brooklynhacker.com</h2>
+                    <h2 style="color: white;">github.com/RobSpectre/Talks</h2>
+                </section>
+            </div>
+        </div>
+
+        <!-- Dependencies -->
+        <script src="bower_components/reveal.js/js/reveal.js"></script>
+        <script src="bower_components/highcharts/adapters/standalone-framework.js"></script>
+        <script src="bower_components/highcharts/highcharts.js"></script>
+        <script src="bower_components/highcharts/modules/funnel.js"></script>
+        <script src="bower_components/vis/dist/vis.min.js"></script>
+        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js"></script>
+
+        <!-- Presentation files -->
+        <script src="js/presentation.js"></script>
+        <script src="js/funnel_charts.js"></script>
+        <script src="js/network_charts.js"></script>
+    </body>
+</html>
