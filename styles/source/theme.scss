@@ -1,7 +1,7 @@
 /**
- * Black theme for reveal.js. This is the opposite of the 'white' theme.
+ * Twilio theme for Reveal.js
  *
- * Copyright (C) 2015 Hakim El Hattab, http://hakim.se
+ * Written by Rob Spectre, 2015.
  */
 
 
@@ -28,7 +28,7 @@ $headingTextShadow: none;
 $headingLetterSpacing: normal;
 $headingTextTransform: uppercase;
 $headingFontWeight: 600;
-$linkColor: #e22228;
+$linkColor: #e12127;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
@@ -47,6 +47,8 @@ section.has-light-background {
 // Theme template ------------------------------
 @import "bower_components/reveal.js/css/theme/template/theme";
 // ---------------------------------------------
+
+
 
 .reveal section {
     height: 100%;
@@ -69,7 +71,8 @@ section.has-light-background {
 }
 
 .reveal .bio {
-	margin: 15px 0px;
+    margin-top: 1em;
+    padding-top: 0.5em;
 	background: rgba(255,255,255,0.9);
 	border: 4px solid $mainColor;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
@@ -85,7 +88,17 @@ section.has-light-background {
 }
 
 .reveal .chart {
-    margin-left: 0;
-    width: 100%;
+    margin: 0;
     height: 85%;
+}
+
+.reveal .map {
+    height: 90%;
+}
+
+.reveal .map img {
+    max-height: none;
+    max-width: none;
+    box-shadow: none;
+    border: none;
 }

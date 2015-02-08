@@ -14,6 +14,8 @@ Reveal.addEventListener('fragmentshown', function(event) {
         advanceFunnelChart(event);
     } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
         advanceNetworkChart(event);
+    } else if (event.fragment.id.indexOf("map") > -1 ) {
+        advanceMap(event);
     } else {
         console.log(event.fragment.id);
     }
@@ -24,7 +26,16 @@ Reveal.addEventListener('fragmenthidden', function(event) {
         retreatFunnelChart(event);
     } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
         retreatNetworkChart(event);
+    } else if (event.fragment.id.indexOf("map") > -1 ) {
+        retreatMap(event);
     } else {
         console.log(event.fragment.id);
     }
 });
+
+Reveal.addEventListener('slidechanged', function(event) {
+    if (event.currentSlide.className.indexOf("map-slide") > -1 && typeof event.currentSlide.map === 'undefined') {
+        map = createMap();
+        event.currentSlide.map = map;
+    }
+}, false);
