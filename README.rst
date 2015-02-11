@@ -19,8 +19,10 @@ Features
 
 * Photo cards
 * Headline cards
-* Charting with `Highcharts`_
-* Network visualization with `Viz.js`_
+* Charts with `amCharts`_
+* Map cards with `Google Maps`_
+* Funnel charts with `Highcharts`_
+* Network visualizations with `Viz.js`_
 * YouTube embeds
 
 
@@ -61,6 +63,8 @@ Meta
 
 .. _Twilio: http://www.twilio.com
 .. _Reveal.js: http://lab.hakim.se/reveal-js/
+.. _amCharts: http://www.amcharts.com/
+.. _Google Maps: https://developers.google.com/maps/documentation/javascript/
 .. _Highcharts: http://www.highcharts.com/
 .. _Viz.js: http://visjs.org/
 .. _Rob Spectre: http://www.brooklynhacker.com

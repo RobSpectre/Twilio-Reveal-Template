@@ -49,9 +49,12 @@ section.has-light-background {
 // ---------------------------------------------
 
 
-
 .reveal section {
     height: 100%;
+}
+
+.reveal .stretch {
+    display: block;
 }
 
 .reveal h1 {

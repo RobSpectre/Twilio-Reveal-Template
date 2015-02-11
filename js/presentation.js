@@ -37,5 +37,7 @@ Reveal.addEventListener('slidechanged', function(event) {
     if (event.currentSlide.className.indexOf("map-slide") > -1 && typeof event.currentSlide.map === 'undefined') {
         map = createMap();
         event.currentSlide.map = map;
+    } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.pie === 'undefined') {
+        advanceChart(event.currentSlide);
     }
 }, false);

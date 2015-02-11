@@ -19,6 +19,7 @@
   "dependencies": {
     "reveal.js": "~3.0.0",
     "highcharts": "~4.0.4",
-    "vis": "~3.8.0"
+    "vis": "~3.8.0",
+    "amcharts": "~3.13.0"
   }
 }

@@ -62,7 +62,7 @@ function createMap(mapOptions) {
             zoom: 7,
             center: new google.maps.LatLng(40.7142, -74.0064),
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: false,
+            disableDefaultUI: true,
             scrollwheel: false,
             draggable: true,
             navigationControl: false,

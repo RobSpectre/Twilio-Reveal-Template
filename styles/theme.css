@@ -263,6 +263,9 @@ body {
 .reveal section {
   height: 100%; }
 
+.reveal .stretch {
+  display: block; }
+
 .reveal h1 {
   background: #e12127;
   color: #fff;
