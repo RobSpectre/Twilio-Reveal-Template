@@ -81,8 +81,9 @@ function generateChartData() {
 
         chartData.push({
             date: newDate,
-            visits: visits});
-        };
+            visits: visits
+        });
+    }
 
     var x = ['x'];
     var visits = ['Visits'];
