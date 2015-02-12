@@ -19,7 +19,7 @@ Features
 
 * Photo cards
 * Headline cards
-* Charts with `amCharts`_
+* Charts with `C3`_
 * Map cards with `Google Maps`_
 * Funnel charts with `Highcharts`_
 * Network visualizations with `Viz.js`_
@@ -63,7 +63,7 @@ Meta
 
 .. _Twilio: http://www.twilio.com
 .. _Reveal.js: http://lab.hakim.se/reveal-js/
-.. _amCharts: http://www.amcharts.com/
+.. _C3: http://c3js.org/
 .. _Google Maps: https://developers.google.com/maps/documentation/javascript/
 .. _Highcharts: http://www.highcharts.com/
 .. _Viz.js: http://visjs.org/
