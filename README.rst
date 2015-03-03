@@ -39,7 +39,7 @@ Install node dependencies
 
 .. code-block:: bash
 
-    $ npm install 
+    $ npm install -g 
 
 Install client dependencies
 
