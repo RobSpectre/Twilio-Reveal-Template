@@ -215,18 +215,6 @@ body {
   border-color: #e12127;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.55); }
 
-html.img-right div.slide-background.present {
-  background-position: right center;}
-
-html.img-left div.slide-background.present {
-  background-position: left center;}
-
-html.img-bottom div.slide-background.present {
-  background-position: bottom;}
-
-html.img-top div.slide-background.present {
-  background-position: top;}
-
 /*********************************************
  * NAVIGATION CONTROLS
  *********************************************/
@@ -318,3 +306,15 @@ html.img-top div.slide-background.present {
   max-width: none;
   box-shadow: none;
   border: none; }
+
+html.img-right div.slide-background.present {
+  background-position: right center; }
+
+html.img-left div.slide-background.present {
+  background-position: left center; }
+
+html.img-bottom div.slide-background.present {
+  background-position: bottom; }
+
+html.img-top div.slide-background.present {
+  background-position: top; }

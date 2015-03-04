@@ -105,3 +105,15 @@ section.has-light-background {
     box-shadow: none;
     border: none;
 }
+
+html.img-right div.slide-background.present {
+  background-position: right center;}
+
+html.img-left div.slide-background.present {
+  background-position: left center;}
+
+html.img-bottom div.slide-background.present {
+  background-position: bottom;}
+
+html.img-top div.slide-background.present {
+  background-position: top;}
