@@ -31,22 +31,29 @@ function processChartSlide(currentSlide) {
                 data = {
                     columns: JSON.parse(data),
                     type: type
-                    };
-                } else {
-                    data = {
-                        columns: JSON.parse(data),
-                        type: type,
-                        x: 'x'
-                    };
-                }
+                };
+            } else {
+                data = {
+                    columns: JSON.parse(data),
+                    type: type,
+                    x: 'x'
+                };
+            }
         } catch (e) {
-            data = {
-                url: data,
-                type: type
-            };
+            if (type == 'pie' || type == 'donut') {
+                data = {
+                    url: data,
+                    type: type
+                };
+            } else {
+                data = {
+                    url: data,
+                    type: type,
+                    x: 'x'
+                };
+            }
         }
     }
-
     chart = createChart(id, type, data);
     slide.chart = chart;
 }
@@ -54,30 +61,53 @@ function processChartSlide(currentSlide) {
 function advanceChart(event) {
     var slide = Reveal.getCurrentSlide();
     value = event.fragment.innerHTML;
+    event.fragment.data_ids = [];
+
+    old_ids = [];
+    slide.chart.data().forEach(function(row) {
+        old_ids.push(row.id);
+    });
+
     try {
         data = JSON.parse(value);
         slide.chart.load({
-            columns: data
+            columns: data,
+            done: function() {
+                addNewIdsToFragment(old_ids, event.fragment);
+            }
         });
-        event.fragment.data = data;
     } catch(e) {
         slide.chart.load({
-            url: value
+            url: value,
+            done: function() {
+                addNewIdsToFragment(old_ids, event.fragment);
+            }
         });
-        event.fragment.data = data;
     }
 }
 
 function retreatChart(event) {
     var slide = Reveal.getCurrentSlide();
     ids = [];
-    event.fragment.data.forEach(function(row) {
-        ids.push(row[0]);
+    event.fragment.data_ids.forEach(function(id) {
+        ids.push(id);
     });
     slide.chart.unload({
         ids: ids
     });
-    event.fragment.data = [];
+}
+
+function addNewIdsToFragment(old_ids, fragment) {
+    new_ids = [];
+    slide.chart.data().forEach(function(row) {
+        new_ids.push(row.id);
+    });
+
+    new_ids.forEach(function(id) {
+        if (old_ids.indexOf(id) == -1) {
+            fragment.data_ids.push(id);
+        }
+    });
 }
 
 function createChart(id, type, data) {
