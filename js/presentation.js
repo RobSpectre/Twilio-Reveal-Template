@@ -12,6 +12,8 @@ Reveal.initialize({
 Reveal.addEventListener('fragmentshown', function(event) {
     if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
         advanceFunnelChart(event);
+    } else if (event.fragment.id.indexOf("chart") > -1 ) {
+        advanceChart(event);
     } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
         advanceNetworkChart(event);
     } else if (event.fragment.id.indexOf("map") > -1 ) {
@@ -24,6 +26,8 @@ Reveal.addEventListener('fragmentshown', function(event) {
 Reveal.addEventListener('fragmenthidden', function(event) {
     if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
         retreatFunnelChart(event);
+    } else if (event.fragment.id.indexOf("chart") > -1 ) {
+        retreatChart(event);
     } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
         retreatNetworkChart(event);
     } else if (event.fragment.id.indexOf("map") > -1 ) {
@@ -37,7 +41,7 @@ Reveal.addEventListener('slidechanged', function(event) {
     if (event.currentSlide.className.indexOf("map-slide") > -1 && typeof event.currentSlide.map === 'undefined') {
         map = createMap();
         event.currentSlide.map = map;
-    } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.pie === 'undefined') {
-        advanceChart(event.currentSlide);
+    } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.chart === 'undefined') {
+        processChartSlide(event.currentSlide);
     }
 }, false);

@@ -298,6 +298,11 @@ body {
   margin: 0;
   height: 85%; }
 
+.fragment.chart {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden; }
+
 .reveal .map {
   height: 90%; }
 

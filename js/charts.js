@@ -1,57 +1,95 @@
-function advanceChart(slide) {
-    if (slide.className.indexOf("chart-pie") > -1) {
-        var chart = c3.generate({
-            bindto: '#pie',
-            data: {
+function processChartSlide(currentSlide) {
+    slide = currentSlide;
+    chart_div = slide.getElementsByTagName('div')[0];
+    id = chart_div.getAttribute('id');
+    data = chart_div.innerHTML;
+
+    type = chart_div.getAttribute('class').split(' ')[1];
+
+    if (data === '') {
+        if (type == 'pie' || type == 'donut') {
+            data = {
                 columns: [
-                    ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
-                    ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
+                    ["versicolor", 40],
+                    ["virginica", 40],
                     ["setosa", 30]
                 ],
                 type: 'pie'
-            }
-        });
-    } else if (slide.className.indexOf("chart-line") > -1) {
-        var chart = c3.generate({
-            bindto: '#line',
-            data: {
-                x: 'x',
+            };
+        } else {
+            data = {
                 columns: generateChartData(),
-            },
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: '%Y-%m-%d',
-                    }
+                type: type,
+                x: 'x',
+            };
+        }
+    }
+
+    if (typeof data == 'string') {
+        try {
+            if (type == 'pie' || type == 'donut') {
+                data = {
+                    columns: JSON.parse(data),
+                    type: type
+                    };
+                } else {
+                    data = {
+                        columns: JSON.parse(data),
+                        type: type,
+                        x: 'x'
+                    };
                 }
-            }
+        } catch (e) {
+            data = {
+                url: data,
+                type: type
+            };
+        }
+    }
+
+    chart = createChart(id, type, data);
+    slide.chart = chart;
+}
+
+function advanceChart(event) {
+    var slide = Reveal.getCurrentSlide();
+    value = event.fragment.innerHTML;
+    try {
+        data = JSON.parse(value);
+        slide.chart.load({
+            columns: data
         });
-    } else if (slide.className.indexOf("chart-bar") > -1) {
-        var chart = c3.generate({
-            bindto: '#bar',
-            data: {
-                x: 'x',
-                columns: generateChartData(),
-                type: 'bar'
-            },
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: '%Y-%m-%d',
-                    }
-                }
-            }
+        event.fragment.data = data;
+    } catch(e) {
+        slide.chart.load({
+            url: value
         });
-    } else if (slide.className.indexOf("chart-area") > -1) {
-        var chart = c3.generate({
-            bindto: '#area',
-            data: {
-                x: 'x',
-                columns: generateChartData(),
-                type: 'area'
-            },
+        event.fragment.data = data;
+    }
+}
+
+function retreatChart(event) {
+    var slide = Reveal.getCurrentSlide();
+    ids = [];
+    event.fragment.data.forEach(function(row) {
+        ids.push(row[0]);
+    });
+    slide.chart.unload({
+        ids: ids
+    });
+    event.fragment.data = [];
+}
+
+function createChart(id, type, data) {
+    if (type == 'pie' || type == 'donut') {
+        return c3.generate({
+            bindto: "#" + id,
+            data: data, 
+        });
+    } else {
+        return c3.generate({
+            bindto: "#" + id,
+            data: data, 
             axis: {
                 x: {
                     type: 'timeseries',
@@ -62,7 +100,6 @@ function advanceChart(slide) {
             }
         });
     }
-
 }
 
 function generateChartData() {
