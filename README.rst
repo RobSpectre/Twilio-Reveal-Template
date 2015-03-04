@@ -54,6 +54,39 @@ Serve presentation
     $ grunt serve
 
 
+Deploy to Heroku
+================
+
+This template comes with some helpers to make it easy to deploy your
+presentations to Heroku.  Once you have cloned the repo and built your
+presentation, use the following steps to deploy the presentation to Heroku.
+
+Create Heroku app.
+
+.. code-block:: bash
+
+    $ heroku create
+
+Configure Heroku app to use Multi-Buildpack so dependencies can be executed in
+order.
+
+.. code-block:: bash
+
+    $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+
+Push your presentation to Heroku
+
+.. code-block:: bash
+
+    $ git push heroku master
+
+Open the presentation on your newly deployed host.
+
+.. code-block:: bash
+
+    $ heroku open
+
+
 Meta
 ===========
 
