@@ -33,15 +33,22 @@ $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
 $heading1Size: 2.3em;
-$heading2Size: 1.6em;
+$heading2Size: 2.3em;
 $heading3Size: 1.3em;
 $heading4Size: 1.0em;
 
 section.has-light-background {
 	&, h1, h2, h3, h4, h5, h6 {
-		color: #222;
+		color: $mainColor;
 	}
 }
+
+section.has-dark-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #fff;
+	}
+}
+
 
 
 // Theme template ------------------------------
@@ -58,8 +65,9 @@ section.has-light-background {
 }
 
 .reveal h1 {
+    text-align: center;
     background: $linkColor;
-    color: $backgroundColor;
+    color: #fff;
     width: 100%;
     float: right;
     position: absolute;
@@ -75,6 +83,7 @@ section.has-light-background {
 
 .reveal .bio {
     margin-top: 1em;
+    margin-bottom: 0.5em;
     padding-top: 0.5em;
 	background: rgba(255,255,255,0.9);
 	border: 4px solid $mainColor;
@@ -82,12 +91,30 @@ section.has-light-background {
 }
 
 .reveal .bio h3, .reveal .bio h4 {
+    color: $mainColor;
     text-transform: none;
 }
 
+
 .reveal .headline {
     background: none;
-    top: 40%;
+    height: 100%;
+    /* Internet Explorer 10 */
+    display:-ms-flexbox;
+    -ms-flex-pack:center;
+    -ms-flex-align:center;
+    /* Firefox */
+    display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+    /* Safari, Opera, and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
 }
 
 .reveal .chart {
