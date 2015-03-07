@@ -3,29 +3,35 @@ function advanceFunnelChart(event) {
     var value = event.fragment.innerHTML;
 
     try {
+        data = JSON.parse(value);
         data = {
-            name: event.fragment.id,
-            y: JSON.parse(value)
-        }
+            name: data[0],
+            id: event.fragment.id,
+            y: data[1]
+        };
     } catch(e) {
         console.log("Could not read value of fragment id: " + event.fragment.id);
     }
-
+    console.log(data);
     slide.funnel_chart.series[0].addPoint(data); 
 }
 
 function retreatFunnelChart(event) {
     var slide = Reveal.getCurrentSlide();
+    var value = event.fragment.innerHTML;
+
     slide.funnel_chart.get(event.fragment.id).remove();
 }
 
 function processFunnelChartSlide(currentSlide) {
-    chart_div = currentSlide.getElementsByTagName('div')[0];
-    id = chart_div.getAttribute('id');
-    data = chart_div.innerHTML;
+    var chart_div = currentSlide.getElementsByTagName('div')[0];
+    var id = chart_div.getAttribute('id');
+    var value = chart_div.innerHTML;
     
-    if (data === 'undefined') {
+    if (value === 'undefined') {
         data = [];
+    } else {
+        data = JSON.parse(value);
     }
 
     funnel_chart = createFunnelChart(id, data);

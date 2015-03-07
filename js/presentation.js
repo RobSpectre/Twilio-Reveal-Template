@@ -12,6 +12,8 @@ Reveal.initialize({
 Reveal.addEventListener('fragmentshown', function(event) {
     if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
         advanceFunnelChart(event);
+    } else if (event.fragment.id.indexOf("funnel") > -1 ) {
+        advanceFunnelChart(event);
     } else if (event.fragment.id.indexOf("chart") > -1 ) {
         advanceChart(event);
     } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
@@ -25,6 +27,8 @@ Reveal.addEventListener('fragmentshown', function(event) {
 
 Reveal.addEventListener('fragmenthidden', function(event) {
     if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
+        retreatFunnelChart(event);
+    } else if (event.fragment.id.indexOf("funnel") > -1 ) {
         retreatFunnelChart(event);
     } else if (event.fragment.id.indexOf("chart") > -1 ) {
         retreatChart(event);
