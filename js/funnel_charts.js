@@ -1,36 +1,52 @@
 function advanceFunnelChart(event) {
     var slide = Reveal.getCurrentSlide();
-    if (event.fragment.id == 'funnel-chart') {
-        funnel_chart = createFunnelChart(event.fragment, ['Awareness', 2000000]);
-        slide.funnel_chart = funnel_chart;
-    } else if (event.fragment.id == 'funnel-chart-add-understanding') {
-        slide.funnel_chart.series[0].addPoint(['Understanding', 1000000]);
-    } else if (event.fragment.id == 'funnel-chart-add-adoption') {
-        slide.funnel_chart.series[0].addPoint(['Adoption', 20000]);
-    } else if (event.fragment.id == 'funnel-chart-add-activation') {
-        slide.funnel_chart.series[0].addPoint(['Activation', 20000]);
+    var value = event.fragment.innerHTML;
+
+    try {
+        data = {
+            name: event.fragment.id,
+            y: JSON.parse(value)
+        }
+    } catch(e) {
+        console.log("Could not read value of fragment id: " + event.fragment.id);
     }
+
+    slide.funnel_chart.series[0].addPoint(data); 
 }
 
 function retreatFunnelChart(event) {
     var slide = Reveal.getCurrentSlide();
-    if (event.fragment.id == 'funnel-chart') {
-        slide.funnel_chart.destroy();
-    } else if (event.fragment.id == 'funnel-chart-add-understanding') {
-        slide.funnel_chart.series[0].data[1].remove();
-    } else if (event.fragment.id == 'funnel-chart-add-adoption') {
-        slide.funnel_chart.series[0].data[2].remove();
-    } else if (event.fragment.id == 'funnel-chart-add-activation') {
-        slide.funnel_chart.series[0].data[3].remove();
-    }
+    slide.funnel_chart.get(event.fragment.id).remove();
 }
 
-function createFunnelChart(fragment, data) {
+function processFunnelChartSlide(currentSlide) {
+    chart_div = currentSlide.getElementsByTagName('div')[0];
+    id = chart_div.getAttribute('id');
+    data = chart_div.innerHTML;
+    
+    if (data === 'undefined') {
+        data = [];
+    }
+
+    funnel_chart = createFunnelChart(id, data);
+    currentSlide.funnel_chart = funnel_chart;
+}
+
+function createFunnelChart(id, data, text) {
+    console.log(id);
+    if (text === 'undefined') {
+        text = '';
+    }
+
+    if (data === 'undefined') {
+        data = [];
+    }
+
     var funnel_chart = new Highcharts.Chart({
         // Core Config
         chart: {
             type: 'funnel',
-            renderTo: fragment.id,
+            renderTo: id,
             spacingRight: 100,
             spacingBottom: 25 
         },
@@ -62,6 +78,5 @@ function createFunnelChart(fragment, data) {
             data: [data] 
         }]
     });
-
     return funnel_chart;
 }

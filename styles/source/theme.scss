@@ -34,7 +34,7 @@ $selectionBackgroundColor: lighten( $linkColor, 25% );
 
 $heading1Size: 2.3em;
 $heading2Size: 2.3em;
-$heading3Size: 1.3em;
+$heading3Size: 1.9em;
 $heading4Size: 1.0em;
 
 section.has-light-background {
@@ -123,9 +123,7 @@ section.has-dark-background {
 }
 
 .fragment.chart {
-    text-indent: 100%;
-    white-space: nowrap;
-    overflow: hidden;
+    display: none;
 }
 
 .reveal .map {

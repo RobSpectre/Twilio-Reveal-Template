@@ -41,6 +41,8 @@ Reveal.addEventListener('slidechanged', function(event) {
     if (event.currentSlide.className.indexOf("map-slide") > -1 && typeof event.currentSlide.map === 'undefined') {
         map = createMap();
         event.currentSlide.map = map;
+    } else if (event.currentSlide.className.indexOf("funnel") > -1 && typeof event.currentSlide.chart === 'undefined') {
+        processFunnelChartSlide(event.currentSlide);
     } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.chart === 'undefined') {
         processChartSlide(event.currentSlide);
     }
