@@ -81,7 +81,7 @@ function createFunnelChart(id, data, text) {
         },
         series: [{
             name: "Funnel",
-            data: [data] 
+            data: data
         }]
     });
     return funnel_chart;
