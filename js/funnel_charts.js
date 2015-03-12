@@ -12,7 +12,6 @@ function advanceFunnelChart(event) {
     } catch(e) {
         console.log("Could not read value of fragment id: " + event.fragment.id);
     }
-    console.log(data);
     slide.funnel_chart.series[0].addPoint(data); 
 }
 
@@ -39,7 +38,6 @@ function processFunnelChartSlide(currentSlide) {
 }
 
 function createFunnelChart(id, data, text) {
-    console.log(id);
     if (text === 'undefined') {
         text = '';
     }

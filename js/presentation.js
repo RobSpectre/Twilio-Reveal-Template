@@ -10,15 +10,13 @@ Reveal.initialize({
 
 // Fragment Routers
 Reveal.addEventListener('fragmentshown', function(event) {
-    if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
+    if ($(event.fragment).hasClass("funnel")) {
         advanceFunnelChart(event);
-    } else if (event.fragment.id.indexOf("funnel") > -1 ) {
-        advanceFunnelChart(event);
-    } else if (event.fragment.id.indexOf("chart") > -1 ) {
+    } else if ($(event.fragment).hasClass("chart")) {
         advanceChart(event);
-    } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
+    } else if ($(event.fragment).hasClass("network-chart")) {
         advanceNetworkChart(event);
-    } else if (event.fragment.id.indexOf("map") > -1 ) {
+    } else if ($(event.fragment).hasClass("map")) {
         advanceMap(event);
     } else {
         console.log(event.fragment.id);
@@ -26,15 +24,13 @@ Reveal.addEventListener('fragmentshown', function(event) {
 });
 
 Reveal.addEventListener('fragmenthidden', function(event) {
-    if (event.fragment.id.indexOf("funnel-chart") > -1 ) {
+    if ($(event.fragment).hasClass("funnel")) {
         retreatFunnelChart(event);
-    } else if (event.fragment.id.indexOf("funnel") > -1 ) {
-        retreatFunnelChart(event);
-    } else if (event.fragment.id.indexOf("chart") > -1 ) {
+    } else if ($(event.fragment).hasClass("chart")) {
         retreatChart(event);
-    } else if (event.fragment.id.indexOf("network-chart") > -1 ) {
+    } else if ($(event.fragment).hasClass("network-chart")) {
         retreatNetworkChart(event);
-    } else if (event.fragment.id.indexOf("map") > -1 ) {
+    } else if ($(event.fragment).hasClass("map")) {
         retreatMap(event);
     } else {
         console.log(event.fragment.id);
@@ -42,9 +38,8 @@ Reveal.addEventListener('fragmenthidden', function(event) {
 });
 
 Reveal.addEventListener('slidechanged', function(event) {
-    if (event.currentSlide.className.indexOf("map-slide") > -1 && typeof event.currentSlide.map === 'undefined') {
-        map = createMap();
-        event.currentSlide.map = map;
+    if (event.currentSlide.className.indexOf("map") > -1 && typeof event.currentSlide.map === 'undefined') {
+        processMapSlide(event.currentSlide);
     } else if (event.currentSlide.className.indexOf("funnel") > -1 && typeof event.currentSlide.chart === 'undefined') {
         processFunnelChartSlide(event.currentSlide);
     } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.chart === 'undefined') {

@@ -60,14 +60,14 @@
                 </section>
                 <section class="chart-pie-slide">
                     <div class="chart pie" id="chart-pie-buildout">[["US Developers", 4600000]]</div>
-                    <div class="fragment chart" id="chart-pie-add-data">[["EMEA Developers", 6300000]]</div>
-                    <div class="fragment chart" id="chart-pie-add-more-data">[["APAC Developers", 6100000]]</div>
+                    <div class="fragment chart">[["EMEA Developers", 6300000]]</div>
+                    <div class="fragment chart">[["APAC Developers", 6100000]]</div>
                     <h1>Pie Card Buildout</h1>
                 </section>
                 <section class="chart-area-slide">
                     <div class="chart area" id="chart-area-buildout">data/buildout_example_1.csv</div>
-                    <div class="fragment chart" id="chart-area-buildout-add-data">data/buildout_example_2.csv</div>
-                    <div class="fragment chart" id="chart-area-buildout-add-more-data">data/buildout_example_3.csv</div>
+                    <div class="fragment chart">data/buildout_example_2.csv</div>
+                    <div class="fragment chart">data/buildout_example_3.csv</div>
                     <h1>Buildout With Data</h1>
                 </section>
                 <section class="funnel-chart-slide"> 
@@ -77,15 +77,15 @@
                 <section class="funnel-chart-slide"> 
                     <h1>Funnel Card Buildout</h1>
                     <div class="funnel chart" id="funnel-chart-buildout">[["Awareness", 2000000]]</div>
-                    <div class="fragment chart" id="funnel-chart-add-understand">["Understanding", 1000000]</div>
-                    <div class="fragment chart" id="funnel-chart-add-adoption">["Adoption", 20000]</div>
-                    <div class="fragment chart" id="funnel-chart-add-activation">["Activation", 20000]</div>
+                    <div class="fragment funnel chart">["Understanding", 1000000]</div>
+                    <div class="fragment funnel chart">["Adoption", 20000]</div>
+                    <div class="fragment funnel chart">["Activation", 20000]</div>
                 </section>
                 <section class="map-slide">
-                    <div class="map"></div>
-                    <div class="fragment" id="map-add-marker"></div>
-                    <div class="fragment" id="map-zoom-us"></div>
-                    <div class="fragment" id="map-zoom-world"></div>
+                    <div class="map">{"location": "Brooklyn, NY", "zoom": 7}</div>
+                    <div class="fragment map marker">{"location": "Brooklyn, NY", "style": "twilio_red"}</div>
+                    <div class="fragment map zoom">{"location": "United States", "zoom": 4}</div>
+                    <div class="fragment map zoom">{"location": "Burkina Faso", "zoom": 2}</div>
                     <h1>Map Card</h1>
                 </section>
                 <section data-background="#2d2c2a">
@@ -120,6 +120,7 @@
         <script src="bower_components/vis/dist/vis.min.js"></script>
         <script src="bower_components/d3/d3.js"></script>
         <script src="bower_components/c3/c3.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="//maps.googleapis.com/maps/api/js"></script>
 
         <!-- Presentation files -->

@@ -1,80 +1,80 @@
 function advanceMap(event) {
     var slide = Reveal.getCurrentSlide();
+    var value = event.fragment.innerHTML;
 
-    if (event.fragment.id == 'map-add-marker') {
-        marker = addMarker("Brooklyn NY",
-                           getMarkerStyle('twilio_red'),
-                           slide.map,
-                           function(marker) {
-                               slide.ny_marker = marker;
-                           });
-    } else if (event.fragment.id == 'map-zoom-us') {
-        zoomToLocation("United States", 4, slide.map);
-    } else if (event.fragment.id == 'map-zoom-world') {
-        zoomToLocation([0, 0], 2, slide.map);
+    try {
+        advance_json = JSON.parse(value);
+    } catch (e) {
+        console.log("Failed to parse value for fragment: " + event.fragment.id);
+    }
+
+    if ($(event.fragment).hasClass('zoom')) {
+        event.fragment.previous_state = {};
+        event.fragment.previous_state.location = slide.map.getCenter();
+        event.fragment.previous_state.zoom = slide.map.getZoom();
+        zoomToLocation(advance_json['location'], advance_json['zoom']);
+    } else if ($(event.fragment).hasClass('marker')) {
+        event.fragment.markers = [];
+        
+        if (value === '[object Array]') {
+            value.forEach(function(marker) {
+                addMarker(marker['location'], marker['style'], function(marker) {
+                    event.fragment.markers.push(marker);
+                });   
+            });
+        } else {
+            addMarker(advance_json['location'], advance_json['style'], function(marker) {
+                event.fragment.markers.push(marker);
+            });   
+        }
     } else {
-        console.log(event);
+        console.log("Unknown fragment class for: " + event.fragment.id);
     }
 }
 
 function retreatMap(event) {
     var slide = Reveal.getCurrentSlide();
 
-    if (event.fragment.id == 'map-add-marker') {
-        slide.ny_marker.setMap(null);
-    } else if (event.fragment.id == 'map-zoom-us') {
-        zoomToLocation("Brooklyn NY", 7, slide.map);
-    } else if (event.fragment.id == 'map-zoom-world') {
-        zoomToLocation("United States", 4, slide.map);
+    if ($(event.fragment).hasClass('zoom')) {
+        slide.map.panTo(event.fragment.previous_state.location);
+        slide.map.setZoom(event.fragment.previous_state.zoom);
+    } else if ($(event.fragment).hasClass('marker')) {
+        event.fragment.markers.forEach(function(marker) {
+           marker.setMap(null); 
+        });
     } else {
-        console.log(event);
+        console.log("Unknown fragment class for: " + event.fragment.id);
     }
 }
 
-function createMap(mapOptions) {
-    // Map styles
-    var styles = [
-      {
-        "featureType": "road",
-        "stylers": [
-          { "visibility": "off" }
-        ]
-      },{
-        "featureType": "poi",
-        "stylers": [
-          { "visibility": "off" }
-        ]
-      },{
-        "featureType": "water",
-        "stylers": [
-          { "color": "#dadada" }
-        ]
-      },{
-        "featureType": "landscape",
-        "stylers": [
-          { "color": "#fbe6e6" }
-        ]
-      }
-    ];
+function processMapSlide(currentSlide) {
+    var map_div = currentSlide.getElementsByClassName('map')[0];
+    var value = map_div.innerHTML;
 
-    if (typeof mapOptions === "undefined") {
-        var mapOptions = {
-            zoom: 7,
-            center: new google.maps.LatLng(40.7142, -74.0064),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true,
-            scrollwheel: false,
-            draggable: true,
-            navigationControl: false,
-            mapTypeControl: false,
-            scaleControl: true,
-            disableDoubleClickZoom: false
-        };
+    try {
+        mapOptions = JSON.parse(value);
+    } catch(e) {
+        mapOptions = undefined;
     }
 
-    var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+    mapOptions = getMapOptions(mapOptions);
 
-    var map = new google.maps.Map(document.getElementsByClassName('map')[0], mapOptions);
+    if (typeof mapOptions['location'] != 'undefined') {
+        return getLatLng(mapOptions['location'], function(point) {
+            mapOptions['center'] = point;
+            map = createMap(map_div, mapOptions);
+            currentSlide.map = map;
+        });
+    } else {
+       map = createMap(map_div, mapOptions);
+       currentSlide.map = map;
+    }
+}
+
+function createMap(map_div, mapOptions) {
+    var styledMap = new google.maps.StyledMapType(map_styles, {name: "Styled Map"});
+
+    var map = new google.maps.Map(map_div, mapOptions);
 
     map.mapTypes.set('map_style', styledMap);
     map.setMapTypeId('map_style');
@@ -82,35 +82,37 @@ function createMap(mapOptions) {
     return map;
 }
 
-// Custom marker styles
-function getMarkerStyle(icon) {
-    var icon_paths = {
-        'twilio_red': '/images/twilio/twilio_logo_red.png',
-        'twilio_blue': '/images/twilio/twilio_logo_blue.png',
-        'twilio_green': '/images/twilio/twilio_logo_green.png',
-        'twilio_purple': '/images/twilio/twilio_logo_purple.png',
-        'twilio_brown': '/images/twilio/twilio_logo_brown.png',
-        'twilio_yellow': '/images/twilio/twilio_logo_yellow.png'
+function getMapOptions(mapOptions) {
+    var mapDefaults = {
+        zoom: 7,
+        center: new google.maps.LatLng(40.7142, -74.0064),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        scrollwheel: false,
+        draggable: true,
+        navigationControl: false,
+        mapTypeControl: false,
+        scaleControl: true,
+        disableDoubleClickZoom: false
     };
 
-    marker_style = {
-        url: icon_paths[icon],
-        size: new google.maps.Size(40, 40),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(20, 20)
-    };
-
-    return marker_style;
+    if (typeof mapOptions === 'undefined') {
+        return mapDefaults;
+    } else {
+        return $.extend({}, mapDefaults, mapOptions);
+    }
 }
 
-
-function addMarker(location, marker_style, map, callback) {
+function addMarker(location, marker_style, callback) {
+    slide = Reveal.getCurrentSlide();
     // Get LatLng point object based on location.
     lat_lng = getLatLng(location, function(point) {
+        marker_style = getMarkerStyle(marker_style);
+
         // Set marker
         var marker = new google.maps.Marker({
             position: point,
-            map: map,
+            map: slide.map,
             animation: google.maps.Animation.DROP,
             icon: marker_style 
         });
@@ -123,10 +125,12 @@ function addMarker(location, marker_style, map, callback) {
     });
 }
 
-function zoomToLocation(location, zoom_level, map, callback) {
+function zoomToLocation(location, zoom_level, callback) {
+    slide = Reveal.getCurrentSlide();
+    
     lat_lng = getLatLng(location, function(point) {
-        map.panTo(point);
-        map.setZoom(zoom_level);
+        slide.map.panTo(point);
+        slide.map.setZoom(zoom_level);
         if (callback && typeof callback === "function") {
             callback(point);
         }
@@ -163,3 +167,47 @@ function getLatLng(location, callback) {
         return point;
     }
 }
+
+function getMarkerStyle(icon) {
+    var icon_paths = {
+        'twilio_red': '/images/twilio/twilio_logo_red.png',
+        'twilio_blue': '/images/twilio/twilio_logo_blue.png',
+        'twilio_green': '/images/twilio/twilio_logo_green.png',
+        'twilio_purple': '/images/twilio/twilio_logo_purple.png',
+        'twilio_brown': '/images/twilio/twilio_logo_brown.png',
+        'twilio_yellow': '/images/twilio/twilio_logo_yellow.png'
+    };
+
+    marker_style = {
+        url: icon_paths[icon],
+        size: new google.maps.Size(40, 40),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(20, 20)
+    };
+
+    return marker_style;
+}
+
+var map_styles = [
+  {
+    "featureType": "road",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+    "featureType": "poi",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+    "featureType": "water",
+    "stylers": [
+      { "color": "#dadada" }
+    ]
+  },{
+    "featureType": "landscape",
+    "stylers": [
+      { "color": "#fbe6e6" }
+    ]
+  }
+];
