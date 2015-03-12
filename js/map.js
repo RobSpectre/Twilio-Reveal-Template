@@ -12,18 +12,18 @@ function advanceMap(event) {
         event.fragment.previous_state = {};
         event.fragment.previous_state.location = slide.map.getCenter();
         event.fragment.previous_state.zoom = slide.map.getZoom();
-        zoomToLocation(advance_json['location'], advance_json['zoom']);
+        zoomToLocation(advance_json.location, advance_json.zoom);
     } else if ($(event.fragment).hasClass('marker')) {
         event.fragment.markers = [];
         
         if (value === '[object Array]') {
             value.forEach(function(marker) {
-                addMarker(marker['location'], marker['style'], function(marker) {
+                addMarker(marker.location, marker.style, function(marker) {
                     event.fragment.markers.push(marker);
                 });   
             });
         } else {
-            addMarker(advance_json['location'], advance_json['style'], function(marker) {
+            addMarker(advance_json.location, advance_json.style, function(marker) {
                 event.fragment.markers.push(marker);
             });   
         }
@@ -59,9 +59,9 @@ function processMapSlide(currentSlide) {
 
     mapOptions = getMapOptions(mapOptions);
 
-    if (typeof mapOptions['location'] != 'undefined') {
-        return getLatLng(mapOptions['location'], function(point) {
-            mapOptions['center'] = point;
+    if (typeof mapOptions.location != 'undefined') {
+        return getLatLng(mapOptions.location, function(point) {
+            mapOptions.center = point;
             map = createMap(map_div, mapOptions);
             currentSlide.map = map;
         });
