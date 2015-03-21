@@ -81,6 +81,11 @@ section.has-dark-background {
     box-shadow: none;
 }
 
+.reveal .title h3 {
+    font-size: 1.6em;
+    margin-bottom: -0.1em;
+}
+
 .reveal .bio {
     margin-top: 1em;
     margin-bottom: 0.5em;
@@ -94,7 +99,6 @@ section.has-dark-background {
     color: $mainColor;
     text-transform: none;
 }
-
 
 .reveal .headline {
     background: none;
