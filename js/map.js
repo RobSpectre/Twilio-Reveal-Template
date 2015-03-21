@@ -3,27 +3,27 @@ function advanceMap(event) {
     var value = event.fragment.innerHTML;
 
     try {
-        advance_json = JSON.parse(value);
+        data = JSON.parse(value);
     } catch (e) {
-        console.log("Failed to parse value for fragment: " + event.fragment.id);
+        console.log("Failed to parse value for fragment: " + value);
     }
 
     if ($(event.fragment).hasClass('zoom')) {
         event.fragment.previous_state = {};
         event.fragment.previous_state.location = slide.map.getCenter();
         event.fragment.previous_state.zoom = slide.map.getZoom();
-        zoomToLocation(advance_json.location, advance_json.zoom);
+        zoomToLocation(data.location, data.zoom);
     } else if ($(event.fragment).hasClass('marker')) {
         event.fragment.markers = [];
         
-        if (value === '[object Array]') {
-            value.forEach(function(marker) {
-                addMarker(marker.location, marker.style, function(marker) {
-                    event.fragment.markers.push(marker);
+        if (data.constructor === Array) {
+            data.forEach(function(marker) {
+                addMarker(marker.location, marker.style, function(point) {
+                    event.fragment.markers.push(point);
                 });   
             });
         } else {
-            addMarker(advance_json.location, advance_json.style, function(marker) {
+            addMarker(data.location, data.style, function(marker) {
                 event.fragment.markers.push(marker);
             });   
         }
