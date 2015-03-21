@@ -14,12 +14,22 @@
 // Include theme-specific fonts
 @import url(../bower_components/reveal.js/lib/font/source-sans-pro/source-sans-pro.css);
 
+// Twilio Colors
+
+$twilioRed: #e12127;
+$twilioMaroon: #971d1f;
+$twilioGray: #2c2c2a;
+$twilioBlack: #231f20;
+$twilioBrown: #b1aca0;
+$twilioBeige: #dbddd7;
+$twilioBlue: #54c3c2;
+
 
 // Override theme settings (see ../template/settings.scss)
 $backgroundColor: #fff;
 
-$mainColor: #2d2c2a;
-$headingColor: #2d2c2a;
+$mainColor: $twilioGray;
+$headingColor: $twilioGray;
 
 $mainFontSize: 38px;
 $mainFont: 'Source Sans Pro', Helvetica, sans-serif;
@@ -28,7 +38,7 @@ $headingTextShadow: none;
 $headingLetterSpacing: normal;
 $headingTextTransform: uppercase;
 $headingFontWeight: 600;
-$linkColor: #e12127;
+$linkColor: $twilioRed;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
@@ -56,12 +66,37 @@ section.has-dark-background {
 // ---------------------------------------------
 
 
+// Slide size and background
 .reveal section {
     height: 100%;
 }
 
-.reveal .stretch {
-    display: block;
+.reveal .red {
+    background-color: $twilioRed;
+}
+
+.reveal .gray {
+    background-color: $twilioGray;
+}
+
+.reveal .maroon {
+    background-color: $twilioMaroon;
+}
+
+.reveal .black {
+    background-color: $twilioBlack;
+}
+
+.reveal .brown {
+    background-color: $twilioBrown; 
+}
+
+.reveal .beige {
+    background-color: $twilioBeige;
+}
+
+.reveal .blue {
+    background-color: $twilioBlue;
 }
 
 .reveal h1 {
