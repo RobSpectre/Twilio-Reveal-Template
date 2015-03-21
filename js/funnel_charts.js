@@ -6,20 +6,21 @@ function advanceFunnelChart(event) {
         data = JSON.parse(value);
         data = {
             name: data[0],
-            id: event.fragment.id,
+            id: data[0],
             y: data[1]
         };
     } catch(e) {
         console.log("Could not read value of fragment id: " + event.fragment.id);
     }
     slide.funnel_chart.series[0].addPoint(data); 
+    event.fragment.row_name = data.id;
 }
 
 function retreatFunnelChart(event) {
     var slide = Reveal.getCurrentSlide();
     var value = event.fragment.innerHTML;
 
-    slide.funnel_chart.get(event.fragment.id).remove();
+    slide.funnel_chart.get(event.fragment.row_name).remove();
 }
 
 function processFunnelChartSlide(currentSlide) {
