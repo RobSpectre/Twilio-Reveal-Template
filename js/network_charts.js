@@ -1,48 +1,163 @@
 function advanceNetworkChart(event) {
     var slide = Reveal.getCurrentSlide();
-    if (event.fragment.id == "network-chart") {
-        createNetworkChart(event);
-        addNodes(50, 'developer');
-    } else if (event.fragment.id == "network-chart-add-twilio") {
-        addTwilio(); 
-    } else if (event.fragment.id == "network-chart-add-devangels") {
-        addDevangels();
-        slide.network_chart.zoomExtent();
-    } else if (event.fragment.id == "network-chart-activate-devangels") {
-        var interval = setInterval( function() {
-            for (i=0; i < slide.devangels.length; i++) {
-                var random_id = randomIntegerBetweenValues(0, slide.node_index);
-                slide.edges.add({
-                    from: random_id,
-                    to: slide.devangels[i], 
+    var value = event.fragment.innerHTML;
+
+    if (value !== '') {
+        try {
+            event.fragment.data = JSON.parse(value);
+        } catch (e) {
+            console.log("Failed to parse value for fragment: " + value);
+        }
+    } else {
+        event.fragment.data = undefined;
+    }
+
+    if ($(event.fragment).hasClass('zoom')) {
+        event.fragment.previous_state = {};
+        event.fragment.previous_state.location = slide.network.getCenterCoordinates();
+        event.fragment.previous_state.zoom = slide.network.getScale();
+
+        if (event.fragment.data === undefined) {
+            var nodes = slide.nodes.getIds();
+            slide.network.zoomExtent(nodes);
+        } else if (event.fragment.data.type !== undefined) {
+            if (event.fragment.data.zoom !== undefined) {
+                var nodes_in_group = [];
+                slide.nodes.forEach( function(node) {
+                    if (node.group == event.fragment.data.type) {
+                        nodes_in_group.push(node.id);
+                    }
                 });
-                slide.edges.add({
-                    from: random_id,
-                    to: 'Twilio',
-                });
+
+                if (event.fragment.data.zoom == 'random') {
+                    random_id = randomIntegerBetweenValues(0, (nodes_in_group.length - 1));
+                    slide.network.focusOnNode(nodes_in_group[random_id], {animation: true, scale: 0.8}); 
+                } else {
+                    slide.network.zoomExtent({nodes: nodes_in_group});
+                }
             }
-            slide.network_chart.zoomExtent();
-        }, 1000);
-        slide.interval = interval;
-    } else if (event.fragment.id == "network-chart-stop-devangels") {
+        } else if (event.fragment.data.node !== undefined) {
+            var zoom = event.fragment.data.zoom;
+            slide.network.focusOnNode(event.fragment.data.node, {animation: true, scale: zoom});
+        }
+    } else if ($(event.fragment).hasClass('add')) {
+        event.fragment.items = [];
+        if ($(event.fragment).hasClass('node')) {
+            if (event.fragment.data.constructor === Array) {
+                event.fragment.data.forEach( function(item) {
+                    processNodeItem(event.fragment, item);
+                });
+            } else {
+                processNodeItem(event.fragment, event.fragment.data);
+            }
+        } else if ($(event.fragment).hasClass('edge')) {
+            if (event.fragment.data.interval !== undefined) {
+                var interval = setInterval( function() {
+                    addEdges(event.fragment, event.fragment.data); 
+                }, event.fragment.data.interval);
+                slide.interval = interval;
+            } else {
+                addEdges(event.fragment, event.fragment.data);
+            }
+        } else {
+            console.log("Unknown item to add to network chart: " + event.fragment.data);
+        }
+    } else if ($(event.fragment).hasClass('remove')) {
+        console.log("TODO: add ability to remove nodes or edges.");
+    } else if ($(event.fragment).hasClass('stop')) {
         clearInterval(slide.interval);
     } else {
-        console.log(event.fragment.id);
+        console.log("Did not recognize network fragment type.");
     }
 }
 
 function retreatNetworkChart(event) {
     var slide = Reveal.getCurrentSlide();
-    if (event.fragment.id == "network-chart") {
-        console.log("Destroy a node.");
+
+    if ($(event.fragment).hasClass('zoom')) {
+        var zoom = {
+            position: event.fragment.previous_state.location,
+            scale: event.fragment.previous_state.zoom,
+            animation: true
+        };
+        slide.network.moveTo(zoom);
+    } else if ($(event.fragment).hasClass('add')) {
+        if ($(event.fragment).hasClass('node')) {
+            event.fragment.items.forEach( function(node) {
+                slide.nodes.remove(node);
+            });
+        } else if ($(event.fragment).hasClass('edge')) {
+            event.fragment.items.forEach( function(edge) {
+                slide.edges.remove(edge);
+            });
+        }
+    } else if ($(event.fragment).hasClass('stop')) {
+        Reveal.prevFragment();
+    } else if ($(event.fragment).hasClass('remove')) {
+        console.log("TODO: readd nodes or edges taken away.");
     } else {
-        console.log(event.fragment.id);
+        console.log("Did not recognize network fragment type.");
     }
 }
 
+function processNetworkSlide(currentSlide) {
+    var network_div = currentSlide.getElementsByClassName('network')[0];
+    var value = network_div.innerHTML;
 
-function createNetworkChart(event) {
-    var options = {
+    try {
+        networkOptions = JSON.parse(value);
+    } catch(e) {
+        networkOptions = undefined;
+    }
+
+    networkOptions = getNetworkOptions(networkOptions);
+
+    network = createNetwork(network_div, networkOptions);
+    currentSlide.network = network;
+}
+
+function processNodeItem(fragment, node_item) {
+    if (node_item.type == 'Twilio') {
+        item = addTwilio();
+        fragment.items.push(item);        
+    } else if (node_item.type == 'devangels') {
+        items = addDevangels();
+        fragment.items = fragment.items.concat(items);
+    } else if (node_item.type == 'educators') {
+        items = addEducators();
+        fragment.items = fragment.items.concat(items);
+    } else if (node_item.type == 'community') {
+        items = addCommunity();
+        fragment.items = fragment.items.concat(items);
+    } else {
+        items = addNodes(node_item.type, node_item.quantity);
+        fragment.items = fragment.items.concat(items);
+    }
+}
+
+function createNetwork(container, options) {
+    var nodes = new vis.DataSet();
+    var edges = new vis.DataSet();
+    var data = {
+        nodes: nodes,
+        edges: edges,
+    };
+
+    var slide = Reveal.getCurrentSlide();
+    slide.nodes = nodes;
+    slide.edges = edges;
+
+    var network = new vis.Network(container, data, options);
+
+    slide.node_index = 1;
+    slide.network_chart = network;
+
+    return network;
+}
+
+function getNetworkOptions(networkOptions) {
+    var networkDefaults = {
+
         stabilize: false,
         width: 960,
         edges: {
@@ -61,7 +176,7 @@ function createNetworkChart(event) {
                 fontSize: 18,
                 radius: 15
             },
-            deveducator: {
+            educator: {
                 image: "images/twilio/twilio_logo_green.png",
                 shape: "image",
                 fontColor: "white",
@@ -108,28 +223,14 @@ function createNetworkChart(event) {
             }
         }
     };
+    
+    if (typeof networkOptions === 'undefined') {
+        return networkDefaults;
+    } else {
+        return $.extend({}, networkDefaults, networkOptions);
+    }
 
-    var nodes = new vis.DataSet();
-    var edges = new vis.DataSet();
-    var data = {
-        nodes: nodes,
-        edges: edges,
-    };
-
-    var slide = Reveal.getCurrentSlide();
-    slide.nodes = nodes;
-    slide.edges = edges;
-
-    var container = document.getElementById(event.fragment.id);
-
-    var network = new vis.Network(container, data, options);
-
-    slide.node_index = 1;
-    slide.network_chart = network;
-
-    return network;
 }
-
 
 function randomIntegerBetweenValues(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -146,14 +247,108 @@ function calculateRandomLocationBasedOnVector(origin_node, length) {
     return {x: x, y: y};
 }
 
-function addNodes(count, type) {
+function addNodes(type, count) {
     var slide = Reveal.getCurrentSlide();
+    nodes = [];
     for (i=0; i < count; i++ ) {
         slide.node_index = slide.node_index + 1;
         id = slide.node_index;
         slide.nodes.add({
             id: id,
             group: type,
+        });
+        nodes.push(id);
+    }
+    return nodes;
+}
+
+function addEdges(fragment, options) {
+    var slide = Reveal.getCurrentSlide();
+
+    if (options.from_group !== 'undefined') {
+        addEdgesFromGroup(fragment, options);
+    } else if (options.constructor === Array) {
+        options.forEach( function(item) {
+            addEdge(fragment, item.from, item.to, item.type);
+        });
+    } else {
+        addEdge(fragment, options.from, options.to, options.type);
+    }
+}
+
+function addEdge(fragment, to, from, type) {
+    var slide = Reveal.getCurrentSlide();
+
+    var id = false;
+    if (type == 'educator') {
+        id = slide.edges.add({
+            from: from,
+            to: to,
+            color: '#e12127',
+            width: 10
+        });
+        fragment.items.push(id);
+    } else if (type == 'community') {
+        id = slide.edges.add({
+            from: from,
+            to: to,
+            color: '#54c3c2',
+            width: 5
+        });
+        fragment.items.push(id);
+    } else if (type == 'devangel') {
+        id = slide.edges.add({
+            from: from,
+            to: to,
+        });
+        fragment.items.push(id);
+
+        twilio_id = slide.edges.add({
+            from: from,
+            to: 'Twilio'
+        });
+        fragment.items.push(twilio_id);
+    } else {
+        id = slide.edges.add({
+            from: from,
+            to: to
+        });
+        fragment.items.push(id);
+    }
+}
+
+function addEdgesFromGroup(fragment, options) {
+    var slide = Reveal.getCurrentSlide();
+
+    var nodes_from_group = [];
+    var nodes_to_group = [];
+
+    slide.nodes.forEach( function(node) {
+        if (node.group == options.from_type) {
+            nodes_from_group.push(node.id);
+        } 
+        if (node.group == options.to_type) {
+            nodes_to_group.push(node.id);
+        }
+    });
+
+    if (nodes_from_group.length === 0) {
+        nodes_from_group = [options.from];
+    }
+    if (nodes_to_group.length === 0) {
+        nodes_to_group = [options.to];
+    }
+
+    if (options.random !== undefined) {
+        random_from_id = randomIntegerBetweenValues(0, (nodes_from_group.length - 1));
+        random_to_id = randomIntegerBetweenValues(0, (nodes_to_group.length - 1));
+
+        addEdge(fragment, nodes_from_group[random_from_id], nodes_to_group[random_to_id], options.type);
+    } else {
+        var edges = nodes_from_group.forEach( function(from_node) {
+            nodes_to_group.forEach( function(to_node) {
+                addEdge(fragment, from_node, to_node, options.type);
+            });
         });
     }
 }
@@ -168,11 +363,13 @@ function addTwilio() {
         radiusMin: 25,
         radiusMax: 100
     });
+
+    return 'Twilio';
 }
 
 function addDevangels() {
     var slide = Reveal.getCurrentSlide();
-    slide.devangels = ['Devin', 'Carter', 'Greg', 'Brent', 'Ricky', 'Matt', 'Marcos', 'Phil', 'Tony', 'Eva'];
+    slide.devangels = ['Devin', 'Greg', 'Brent', 'Ricky', 'Matt', 'Marcos', 'Phil', 'Tony', 'Eva'];
 
     var twilio_node = slide.network_chart.getPositions('Twilio').Twilio;
     for (i=0; i < slide.devangels.length; i++) {
@@ -185,23 +382,27 @@ function addDevangels() {
             group: 'devangel'
         });
     }
+
+    return slide.devangels;
 }
 
 function addEducators() {
     var slide = Reveal.getCurrentSlide();
-    slide.deveducators = ['Jarod', 'Kevin'];
+    slide.educators = ['Jarod', 'Kevin'];
 
     var twilio_node = slide.network_chart.getPositions('Twilio').Twilio;
-    for (i=0; i < slide.deveducators.length; i++) {
+    for (i=0; i < slide.educators.length; i++) {
         var length = randomIntegerBetweenValues(250, 400);
         var coordinates = calculateRandomLocationBasedOnVector(twilio_node, length);
         slide.nodes.add({
-            id: slide.deveducators[i],
+            id: slide.educators[i],
             x: coordinates.x,
             y: coordinates.y,
-            group: 'deveducator'
+            group: 'educator'
         });
     }
+
+    return slide.educators;
 }
 
 function addCommunity() {
@@ -219,4 +420,6 @@ function addCommunity() {
             group: 'community'
         });
     }
+
+    return slide.community;
 }

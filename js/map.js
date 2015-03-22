@@ -142,6 +142,7 @@ function getLatLng(location, callback) {
     // Get LatLng Point object based on various input.
     // Accepts a string location to search (e.g. "Brooklyn NY")
     // or an Array with latLng (eg. [40.7142, -74.0064])
+    var point = false;
     if (typeof location === 'string') {
         geocoder = new google.maps.Geocoder();
 
@@ -154,13 +155,13 @@ function getLatLng(location, callback) {
             }
         });
     } else if (Object.prototype.toString.call(location) === '[object Array]') {
-        var point = new google.maps.LatLng(location[0], location[1]); 
+        point = new google.maps.LatLng(location[0], location[1]); 
         if (callback && typeof callback === "function") {
             callback(point);
         }
         return point;
     } else {
-        var point = "Could not find location: " + location;
+        point = "Could not find location: " + location;
         if (callback && typeof callback === "function") {
             callback(point);
         }

@@ -35,11 +35,18 @@ Clone repo
 
     $ git clone https://github.com/RobSpectre/Twilio-Reveal-Template.git 
 
+
+Install ``grunt`` and ``bower``
+
+.. code-block:: bash
+    
+    $ npm install -g bower grunt
+
 Install node dependencies
 
 .. code-block:: bash
 
-    $ npm install -g 
+    $ npm install
 
 Install client dependencies
 

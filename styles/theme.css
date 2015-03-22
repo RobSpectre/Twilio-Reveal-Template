@@ -342,7 +342,7 @@ body {
   margin: 0;
   height: 85%; }
 
-.fragment.chart {
+.fragment.chart, .fragment.network {
   display: none; }
 
 .reveal .map {

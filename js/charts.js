@@ -137,6 +137,8 @@ function generateChartData() {
     var firstDate = new Date();
     firstDate.setDate(firstDate.getDate() - 5);
 
+    var visits = false;
+
     for (var i = 0; i < 100; i++) {
         // we create date objects here. In your data, you can have date strings
         // and then set format of your dates using chart.dataDateFormat property,
@@ -144,7 +146,7 @@ function generateChartData() {
         var newDate = new Date(firstDate);
         newDate.setDate(newDate.getDate() + i);
 
-        var visits = Math.round(Math.random() * (40 + i / 5)) + 20 + i;
+        visits = Math.round(Math.random() * (40 + i / 5)) + 20 + i;
 
         chartData.push({
             date: newDate,
@@ -153,7 +155,7 @@ function generateChartData() {
     }
 
     var x = ['x'];
-    var visits = ['Visits'];
+    visits = ['Visits'];
     for (i=0; i < 100; i++) {
         x.push(chartData[i].date);
         visits.push(chartData[i].visits);

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -91,13 +91,25 @@
                     <div class="fragment map zoom">{"location": "Burkina Faso", "zoom": 2}</div>
                     <h1>Map Card</h1>
                 </section>
-                <section class="gray">
+                <section class="network-slide gray">
                     <h1>Network Card</h1>
-                    <div class="fragment network" id="network-chart"></div>
-                    <div class="fragment network" id="network-chart-add-twilio"></div>
-                    <div class="fragment network" id="network-chart-add-devangels"></div>
-                    <div class="fragment network" id="network-chart-activate-devangels"></div>
-                    <div class="fragment network" id="network-chart-stop-devangels"></div>
+                    <div class="network" id="network-chart"></div>
+                    <div class="fragment network add node">{"type": "developer", "quantity": 100}</div>
+                    <div class="fragment network add node">[{"type": "Twilio"}, {"type": "devangels"}]</div>
+                    <div class="fragment network zoom"></div>
+                    <div class="fragment network zoom">{"node": "Twilio", "zoom": 0.4}</div>
+                    <div class="fragment network add edge">{"from_type": "devangel", "to_type": "developer", "random": true, "type": "devangel", "interval": 200}</div>
+                    <div class="fragment network zoom">{"type": "devangel", "zoom": "random"}</div>
+                    <div class="fragment network zoom"></div>
+                    <div class="fragment network stop"></div>
+                    <div class="fragment network add node">{"type": "educators"}</div>
+                    <div class="fragment network zoom">{"type": "educator", "zoom": "random"}</div>
+                    <div class="fragment network add edge">{"from": "Twilio", "to_type": "developer", "type": "educator", "random": true, "interval": 300}</div>
+                    <div class="fragment network zoom"></div>
+                    <div class="fragment network stop"></div>
+                    <div class="fragment network add node">{"type": "community"}</div>
+                    <div class="fragment network add edge">{"from_type": "developer", "to_type": "developer", "type": "community", "random": true, "interval": 200}</div>
+                    <div class="fragment network zoom"></div>
                 </section>                
                 <section>
                     <h1>Youtube Card</h1>
