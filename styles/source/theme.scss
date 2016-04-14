@@ -177,13 +177,43 @@ section.has-dark-background {
 }
 
 html.img-right div.slide-background.present {
-  background-position: right center;}
+  background-position: right center;
+}
 
 html.img-left div.slide-background.present {
-  background-position: left center;}
+  background-position: left center;
+}
 
 html.img-bottom div.slide-background.present {
-  background-position: bottom;}
+  background-position: bottom;
+}
 
 html.img-top div.slide-background.present {
-  background-position: top;}
+  background-position: top;
+}
+
+.title h3 {
+  text-align: right;
+  padding: 0.25em 0.5em 0.25em 0.5em;
+  float: right;
+  clear: right;
+}
+
+.intro .title h3 {
+  background-color: $twilioRed;
+  color: $backgroundColor;
+  visibility: hidden;
+}
+
+.title .title h3 {
+  background-color: $backgroundColor;
+  color: $twilioRed;
+}
+
+.animated {
+  visibility: visible !important;
+}
+
+.visible {
+  visibility: visible !important;
+}

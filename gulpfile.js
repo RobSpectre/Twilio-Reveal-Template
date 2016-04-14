@@ -35,9 +35,8 @@ gulp.task('autoreload', function() {
 });
 
 
-/* Watch Files For Changes */
 gulp.task('watch', function() {
-  gulp.watch('./styles/sources/*.scss', ['sass']);
+  gulp.watch('./styles/source/*.scss', ['sass']);
   gulp.watch('./js/*.js', ['lint', livereload.changed]);
   gulp.watch('./styles/*.css').on('change', livereload.changed);
   gulp.watch('*.html').on('change', livereload.changed);

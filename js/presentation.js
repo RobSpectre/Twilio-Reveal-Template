@@ -50,5 +50,13 @@ Reveal.addEventListener('slidechanged', function(event) {
     processFunnelChartSlide(event.currentSlide);
   } else if (event.currentSlide.className.indexOf("chart") > -1 && typeof event.currentSlide.chart === 'undefined') {
     processChartSlide(event.currentSlide);
+  } else if (event.currentSlide.className.indexOf("intro") > -1) {
+    processIntroSlide(event.currentSlide);
   }
 }, false);
+
+Reveal.addEventListener( 'ready', function(event) {
+  if (event.currentSlide.className.indexOf("intro") > -1) {
+    processIntroSlide(event.currentSlide);
+  }
+});
