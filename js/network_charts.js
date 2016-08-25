@@ -14,12 +14,12 @@ function advanceNetworkChart(event) {
 
   if ($(event.fragment).hasClass('zoom')) {
     event.fragment.previous_state = {};
-    event.fragment.previous_state.location = slide.network.getCenterCoordinates();
+    event.fragment.previous_state.location = slide.network.getViewPosition();
     event.fragment.previous_state.zoom = slide.network.getScale();
 
     if (event.fragment.data === undefined) {
       var nodes = slide.nodes.getIds();
-      slide.network.zoomExtent(nodes);
+      slide.network.fit({ nodes: nodes, animation: true});
     } else if (event.fragment.data.type !== undefined) {
       if (event.fragment.data.zoom !== undefined) {
         var nodes_in_group = [];
@@ -31,14 +31,14 @@ function advanceNetworkChart(event) {
 
         if (event.fragment.data.zoom == 'random') {
           random_id = randomIntegerBetweenValues(0, (nodes_in_group.length - 1));
-          slide.network.focusOnNode(nodes_in_group[random_id], {animation: true, scale: 0.8}); 
+          slide.network.focus(nodes_in_group[random_id], {animation: true, scale: 0.8}); 
         } else {
-          slide.network.zoomExtent({nodes: nodes_in_group});
+          slide.network.fit({nodes: nodes_in_group});
         }
       }
     } else if (event.fragment.data.node !== undefined) {
       var zoom = event.fragment.data.zoom;
-      slide.network.focusOnNode(event.fragment.data.node, {animation: true, scale: zoom});
+      slide.network.focus(event.fragment.data.node, {animation: true, scale: zoom});
     }
   } else if ($(event.fragment).hasClass('add')) {
     event.fragment.items = [];
@@ -158,37 +158,39 @@ function createNetwork(container, options) {
 function getNetworkOptions(networkOptions) {
   var networkDefaults = {
 
-    stabilize: false,
-    width: 960,
+    autoResize: false,
     edges: {
       color: {
         color: 'white',
       },
-      fontSize: 0,
-      widthMin: 10,
-      widthMax: 100
+      font: "0",
+      length: 200,
+      scaling: {
+        min: 10,
+        max: 100
+      }
     },
     groups: {
       devangel: {
         image: "images/twilio/twilio_logo_blue.png",
         shape: "image",
-        fontColor: "white",
-        fontSize: 18,
-        radius: 15
+        font: "14px arial white",
+        size: 15,
+        fixed: true
       },
       educator: {
         image: "images/twilio/twilio_logo_green.png",
         shape: "image",
-        fontColor: "white",
-        fontSize: 18,
-        radius: 15
+        font: "14px arial white",
+        size: 15,
+        fixed: true
       },
       community: {
         image: "images/twilio/twilio_logo_yellow.png",
         shape: "image",
-        fontColor: "white",
-        fontSize: 18,
-        radius: 15
+        font: "14px arial white",
+        size: 15,
+        fixed: true
       },
       developer: {
         shape: "circle",
@@ -200,11 +202,11 @@ function getNetworkOptions(networkOptions) {
             background: "white"
           }
         },
-        radius: 40,
-        fontSize: 0
+        size: 10,
+        font: "0px arial white"
       },
       muggle: {
-        shape: "square",
+        shape: "box",
         color: {
           border: "brown",
           background: "brown",
@@ -213,13 +215,18 @@ function getNetworkOptions(networkOptions) {
             background: "white"
           }
         },
-        fontSize: 0
+        size: 10,
+        font: {
+          size: "0"
+        }
       },
       customer: {
         image: "images/twilio/twilio_logo_red.png",
         shape: "image",
-        radius: 15,
-        fontSize: 0
+        size: 15,
+        font: {
+          size: "0"
+        }
       }
     }
   };
@@ -285,7 +292,7 @@ function addEdge(fragment, to, from, type) {
       from: from,
       to: to,
       color: '#e12127',
-      width: 10
+      width: 10,
     });
     fragment.items.push(id);
   } else if (type == 'community') {
@@ -293,7 +300,7 @@ function addEdge(fragment, to, from, type) {
       from: from,
       to: to,
       color: '#54c3c2',
-      width: 5
+      width: 5,
     });
     fragment.items.push(id);
   } else if (type == 'devangel') {
@@ -359,9 +366,9 @@ function addTwilio() {
     id: 'Twilio',
     image: "images/twilio/twilio_logo_red_medium.png",
     shape: "image",
-    fontSize: 0,
-    radiusMin: 25,
-    radiusMax: 100
+    font: "0 arial white",
+    size: 75,
+    fixed: true
   });
 
   return 'Twilio';
@@ -369,14 +376,15 @@ function addTwilio() {
 
 function addDevangels() {
   var slide = Reveal.getCurrentSlide();
-  slide.devangels = ['Devin', 'Greg', 'Brent', 'Ricky', 'Matt', 'Marcos', 'Phil', 'Tony', 'Eva'];
+  slide.devangels = ['Devin', 'Greg', 'Brent', 'Ricky', 'Matt', 'Marcos', 'Phil', 'Nikita', 'Sam', 'Dominik'];
 
   var twilio_node = slide.network_chart.getPositions('Twilio').Twilio;
   for (i=0; i < slide.devangels.length; i++) {
-    var length = randomIntegerBetweenValues(700, 900);
+    var length = randomIntegerBetweenValues(800, 900);
     var coordinates = calculateRandomLocationBasedOnVector(twilio_node, length);
     slide.nodes.add({
       id: slide.devangels[i],
+      label: slide.devangels[i],
       x: coordinates.x,
       y: coordinates.y,
       group: 'devangel'
@@ -388,14 +396,15 @@ function addDevangels() {
 
 function addEducators() {
   var slide = Reveal.getCurrentSlide();
-  slide.educators = ['Jarod', 'Kevin'];
+  slide.educators = ['Kevin', 'David', 'Andrew'];
 
   var twilio_node = slide.network_chart.getPositions('Twilio').Twilio;
   for (i=0; i < slide.educators.length; i++) {
-    var length = randomIntegerBetweenValues(250, 400);
+    var length = randomIntegerBetweenValues(500, 600);
     var coordinates = calculateRandomLocationBasedOnVector(twilio_node, length);
     slide.nodes.add({
       id: slide.educators[i],
+      label: slide.educators[i],
       x: coordinates.x,
       y: coordinates.y,
       group: 'educator'
@@ -407,7 +416,7 @@ function addEducators() {
 
 function addCommunity() {
   var slide = Reveal.getCurrentSlide();
-  slide.community = ['Kyle', 'Crowe'];
+  slide.community = ['Kyle', 'Megan', 'Ricky'];
 
   var twilio_node = slide.network_chart.getPositions('Twilio').Twilio;
   for (i=0; i < slide.community.length; i++) {
@@ -415,6 +424,7 @@ function addCommunity() {
     var coordinates = calculateRandomLocationBasedOnVector(twilio_node, length);
     slide.nodes.add({
       id: slide.community[i],
+      label: slide.community[i],
       x: coordinates.x,
       y: coordinates.y,
       group: 'community'
