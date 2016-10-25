@@ -22,6 +22,8 @@ Reveal.addEventListener('fragmentshown', function(event) {
     advanceMap(event);
   } else if ($(event.fragment).hasClass("animated")) {
     animateSlide(event);
+  } else if ($(event.fragment).hasClass("custom")) {
+    advanceCustom(event);
   } else {
     console.log("Did not recognize fragment type.");
   }
@@ -38,6 +40,8 @@ Reveal.addEventListener('fragmenthidden', function(event) {
     retreatNetworkChart(event);
   } else if ($(event.fragment).hasClass("map")) {
     retreatMap(event);
+  } else if ($(event.fragment).hasClass("custom")) {
+    retreatCustom(event);
   } else {
     console.log("Did not recognize fragment type.");
   }
@@ -60,6 +64,8 @@ Reveal.addEventListener('slidechanged', function(event) {
     processChartSlide(event.currentSlide);
   } else if (event.currentSlide.className.indexOf("intro") > -1) {
     processIntroSlide(event.currentSlide);
+  } else if (event.currentSlide.className.indexOf("custom") > -1 && typeof event.currentSlide.chart == 'undefined') {
+    processCustomSlide(event.currentSlide);
   }
 }, false);
 
