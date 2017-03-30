@@ -74,12 +74,11 @@ Create Heroku app.
 
     $ heroku create
 
-Configure Heroku app to use Multi-Buildpack so dependencies can be executed in
-order.
-
+Configure Heroku app to use both Node and Python buildpacks. 
 .. code-block:: bash
 
-    $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+    $ heroku buildpacks:set heroku/nodejs
+    $ heroku buildpacks:add --index 1 heroku/python
 
 Push your presentation to Heroku
 
