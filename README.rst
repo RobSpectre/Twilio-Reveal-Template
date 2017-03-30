@@ -21,7 +21,7 @@ Features
 * Headline cards
 * Charts with `C3`_
 * Map cards with `Google Maps`_
-* Funnel charts with `Highcharts`_
+* Funnel and Pyramid charts with `Highcharts`_
 * Network visualizations with `Viz.js`_
 * YouTube embeds
 
@@ -36,11 +36,11 @@ Clone repo
     $ git clone https://github.com/RobSpectre/Twilio-Reveal-Template.git 
 
 
-Install ``grunt`` and ``bower``
+Install ``gulp`` and ``bower``
 
 .. code-block:: bash
     
-    $ npm install -g bower grunt
+    $ npm install -g bower gulp
 
 Install node dependencies
 
@@ -58,7 +58,7 @@ Serve presentation
 
 .. code-block:: bash
     
-    $ grunt serve
+    $ gulp serve
 
 
 Deploy to Heroku
