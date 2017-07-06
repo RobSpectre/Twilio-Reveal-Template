@@ -364,11 +364,11 @@ body {
   box-pack: center;
   box-align: center; }
 
-.reveal .chart, .reveal .network, .reveal .map {
+.reveal .chart, .reveal .network, .reveal .map, .reveal .timeline {
   margin: 0;
   height: 85%; }
 
-.fragment.chart, .fragment.network {
+.fragment.chart, .fragment.network, .fragment.timeline {
   display: none; }
 
 .reveal .map {
@@ -415,3 +415,22 @@ html.img-top div.slide-background.present {
 
 .masked {
   opacity: 0 !important; }
+
+.reveal .vis-timeline {
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
+  font-size: 0.5em; }
+
+.vis-item {
+  background-color: #2c2c2a;
+  color: #fff; }
+
+.vis-item.vis-line, .vis-item.vis-dot {
+  border-color: #2c2c2a; }
+
+.vis-item.vis-selected {
+  background-color: #e12127;
+  border-color: #e12127; }
+
+.reveal .timeline {
+  height: 3em;
+  margin-bottom: 1em; }

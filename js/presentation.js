@@ -18,6 +18,8 @@ Reveal.addEventListener('fragmentshown', function(event) {
     advanceChart(event);
   } else if ($(event.fragment).hasClass("network")) {
     advanceNetworkChart(event);
+  } else if ($(event.fragment).hasClass("timeline")) {
+    advanceTimelineChart(event);
   } else if ($(event.fragment).hasClass("map")) {
     advanceMap(event);
   } else if ($(event.fragment).hasClass("animated")) {
@@ -38,6 +40,8 @@ Reveal.addEventListener('fragmenthidden', function(event) {
     retreatChart(event);
   } else if ($(event.fragment).hasClass("network")) {
     retreatNetworkChart(event);
+  } else if ($(event.fragment).hasClass("timeline")) {
+    retreatTimelineChart(event);
   } else if ($(event.fragment).hasClass("map")) {
     retreatMap(event);
   } else if ($(event.fragment).hasClass("custom")) {
@@ -56,6 +60,8 @@ Reveal.addEventListener('slidechanged', function(event) {
     processMapSlide(event.currentSlide);
   } else if (event.currentSlide.className.indexOf("network") > -1 && typeof event.currentSlide.network === 'undefined') {
     processNetworkSlide(event.currentSlide);
+  } else if (event.currentSlide.className.indexOf("timeline") > -1 && typeof event.currentSlide.timeline === 'undefined') {
+    processTimelineSlide(event.currentSlide);
   } else if (event.currentSlide.className.indexOf("funnel") > -1 && typeof event.currentSlide.chart === 'undefined') {
     processFunnelChartSlide(event.currentSlide);
   } else if (event.currentSlide.className.indexOf("pyramid") > -1 && typeof event.currentSlide.chart === 'undefined') {

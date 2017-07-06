@@ -156,12 +156,12 @@ section.has-dark-background {
     box-align:center;
 }
 
-.reveal .chart, .reveal .network, .reveal .map {
+.reveal .chart, .reveal .network, .reveal .map, .reveal .timeline {
     margin: 0;
     height: 85%;
 }
 
-.fragment.chart, .fragment.network {
+.fragment.chart, .fragment.network, .fragment.timeline {
     display: none;
 }
 
@@ -220,4 +220,28 @@ html.img-top div.slide-background.present {
 
 .masked {
   opacity: 0 !important;
+}
+
+.reveal .vis-timeline {
+  font-family: $mainFont;
+  font-size: 0.5em;
+}
+
+.vis-item {
+  background-color: $twilioGray;
+  color: $backgroundColor;
+}
+
+.vis-item.vis-line, .vis-item.vis-dot {
+  border-color: $twilioGray;
+}
+
+.vis-item.vis-selected {
+  background-color: $twilioRed;
+  border-color: $twilioRed;
+}
+
+.reveal .timeline {
+  height: 3em;
+  margin-bottom: 1em;
 }
