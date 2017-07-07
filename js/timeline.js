@@ -50,6 +50,10 @@ function advanceTimelineChart(event) {
   if (event.fragment.hasAttribute('data-move-to-date')) {
     advanceMoveToDate(slide, event);
   }
+
+  if (event.fragment.hasAttribute('data-fit')) {
+    advanceFit(slide, event);
+  }
 }
 
 function retreatTimelineChart(event) {
@@ -63,6 +67,10 @@ function retreatTimelineChart(event) {
 
   if (event.fragment.hasAttribute('data-move-to-date')) {
     retreatMoveToDate(slide, event);
+  }
+
+  if (event.fragment.hasAttribute('data-fit')) {
+    retreatFit(slide, event);
   }
 }
 
@@ -103,6 +111,15 @@ function advanceMoveToDate(slide, event) {
 
 function retreatMoveToDate(slide, event) {
   slide.timeline.setWindow(slide.previous_date.start, slide.previous_date.end);
+}
+
+function advanceFit(slide, event) {
+  slide.previous_fit = slide.timeline.getWindow();
+  slide.timeline.fit();
+}
+
+function retreatFit(slide, event) {
+  slide.timeline.setWindow(slide.previous_fit.start, slide.previous_fit.end);
 }
 
 function getIds(value) {
