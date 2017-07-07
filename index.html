@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
 
   <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css" />
+  <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css" />
   <link rel="stylesheet" href="bower_components/vis/dist/vis.min.css" />
   <link rel="stylesheet" href="bower_components/c3/c3.min.css" />
   <link rel="stylesheet" href="bower_components/animate.css/animate.min.css" />
@@ -154,6 +155,18 @@
       <div class="fragment animated hinge"></div>
       <h1>Animation Card</h1>
     </section>
+    <section>
+      <pre><code data-noescape>
+from twilio.rest import TwilioRestClient
+
+client = TwilioRestClient()
+
+client.messages.create(from_="+15556667777",
+                       to="+15558675309",
+                       body="Hot damn, this interface is cozy.")
+      </code></pre>
+      <h1>Code card</h1>
+    </section>
     <section class="title" data-background-video="images/intro.mp4"
              data-background-video-loop>
       <img class="unstyled" src="images/twilio/Twilio_logo_white.png" />
@@ -168,6 +181,7 @@
 </div>
 
   <!-- Dependencies -->
+  <script src="bower_components/headjs/dist/1.0.0/head.min.js"></script>
   <script src="bower_components/reveal.js/js/reveal.js"></script>
   <script src="bower_components/highcharts/adapters/standalone-framework.js"></script>
   <script src="bower_components/highcharts/highcharts.js"></script>
