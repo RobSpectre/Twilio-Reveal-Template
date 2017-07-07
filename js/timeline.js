@@ -54,6 +54,10 @@ function advanceTimelineChart(event) {
   if (event.fragment.hasAttribute('data-fit')) {
     advanceFit(slide, event);
   }
+
+  if (event.fragment.hasAttribute('data-select-items')) {
+    advanceSelectItems(slide, event);
+  }
 }
 
 function retreatTimelineChart(event) {
@@ -71,6 +75,10 @@ function retreatTimelineChart(event) {
 
   if (event.fragment.hasAttribute('data-fit')) {
     retreatFit(slide, event);
+  }
+
+  if (event.fragment.hasAttribute('data-select-items')) {
+    retreatSelectItems(slide, event);
   }
 }
 
@@ -92,7 +100,7 @@ function retreatContent(slide, event) {
 }
 
 function advanceSetWindow(slide, event) {
-  slide.previous_window = slide.timeline.getWindow();
+  event.fragment.previous_window = slide.timeline.getWindow();
 
   var ids = getIds(event.fragment.dataset.setWindow);
 
@@ -100,26 +108,54 @@ function advanceSetWindow(slide, event) {
 }
 
 function retreatSetWindow(slide, event) {
-  slide.timeline.setWindow(slide.previous_window.start, slide.previous_window.end);
+  slide.timeline.setWindow(event.fragment.previous_window.start,
+                           event.fragment.previous_window.end);
 }
 
 function advanceMoveToDate(slide, event) {
-  slide.previous_date = slide.timeline.getWindow();
+  event.fragment.previous_date = slide.timeline.getWindow();
 
   slide.timeline.moveTo(event.fragment.dataset.moveToDate);
 }
 
 function retreatMoveToDate(slide, event) {
-  slide.timeline.setWindow(slide.previous_date.start, slide.previous_date.end);
+  slide.timeline.setWindow(event.fragment.previous_date.start,
+                           event.fragment.previous_date.end);
 }
 
 function advanceFit(slide, event) {
-  slide.previous_fit = slide.timeline.getWindow();
+  event.fragment.previous_fit = slide.timeline.getWindow();
   slide.timeline.fit();
 }
 
 function retreatFit(slide, event) {
-  slide.timeline.setWindow(slide.previous_fit.start, slide.previous_fit.end);
+  slide.timeline.setWindow(event.fragment.previous_fit.start,
+                           event.fragment.previous_fit.end);
+}
+
+function advanceSelectItems(slide, event) {
+  var selection = slide.timeline.getSelection();
+
+  if (selection.length == 0) {
+    event.fragment.previous_selection = slide.timeline.getWindow();
+  } else {
+    event.fragment.previous_selection = selection;
+  }
+  
+  var ids = getIds(event.fragment.dataset.selectItems);
+  slide.timeline.setSelection(ids,
+                              {focus: true});
+}
+
+function retreatSelectItems(slide, event) {
+  if (Array.isArray(event.fragment.previous_selection)) {
+    slide.timeline.setSelection(event.fragment.previous_selection,
+                                {focus: true});
+  } else {
+    slide.timeline.setSelection([]);
+    slide.timeline.setWindow(event.fragment.previous_selection.start,
+                             event.fragment.previous_selection.end);
+  }
 }
 
 function getIds(value) {
