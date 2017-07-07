@@ -2,8 +2,6 @@ function processTimelineSlide(currentSlide) {
   var timeline_div = currentSlide.getElementsByClassName('timeline')[0];
   var value = timeline_div.innerHTML;
   timeline_div.innerHTML = '';
-  var timeline_data = undefined;
-
   try {
     if (value.indexOf('data/') == 0) {
       $.ajax({
@@ -48,6 +46,10 @@ function advanceTimelineChart(event) {
   if (event.fragment.hasAttribute('data-set-window')) {
     advanceSetWindow(slide, event);
   }
+
+  if (event.fragment.hasAttribute('data-move-to-date')) {
+    advanceMoveToDate(slide, event);
+  }
 }
 
 function retreatTimelineChart(event) {
@@ -57,6 +59,10 @@ function retreatTimelineChart(event) {
 
   if (event.fragment.hasAttribute('data-set-window')) {
     retreatSetWindow(slide, event);
+  }
+
+  if (event.fragment.hasAttribute('data-move-to-date')) {
+    retreatMoveToDate(slide, event);
   }
 }
 
@@ -78,7 +84,7 @@ function retreatContent(slide, event) {
 }
 
 function advanceSetWindow(slide, event) {
-  slide.previous_window = slide.timeline.getDataRange();
+  slide.previous_window = slide.timeline.getWindow();
 
   var ids = getIds(event.fragment.dataset.setWindow);
 
@@ -86,7 +92,17 @@ function advanceSetWindow(slide, event) {
 }
 
 function retreatSetWindow(slide, event) {
-  slide.timeline.setWindow(slide.previous_window.min, slide.previous_window.max);
+  slide.timeline.setWindow(slide.previous_window.start, slide.previous_window.end);
+}
+
+function advanceMoveToDate(slide, event) {
+  slide.previous_date = slide.timeline.getWindow();
+
+  slide.timeline.moveTo(event.fragment.dataset.moveToDate);
+}
+
+function retreatMoveToDate(slide, event) {
+  slide.timeline.setWindow(slide.previous_date.start, slide.previous_date.end);
 }
 
 function getIds(value) {
