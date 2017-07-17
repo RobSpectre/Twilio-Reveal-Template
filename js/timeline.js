@@ -29,6 +29,23 @@ function createTimeline(container, data) {
   var items = new vis.DataSet(data);
   var options = {};
 
+  if (container.hasAttribute('data-start')) {
+    options.start = container.dataset.start;
+  }
+
+  if (container.hasAttribute('data-end')) {
+    options.end = container.dataset.end;
+  }
+
+  if (container.hasAttribute('data-min-height')) {
+    options.minHeight = container.dataset.minHeight;
+  }
+
+  if (container.hasAttribute('data-max-height')) {
+    options.maxHeight = container.dataset.maxHeight;
+  }
+
+
   var timeline = new vis.Timeline(container, data, options);
   
   slide.timeline = timeline;
@@ -43,8 +60,12 @@ function advanceTimelineChart(event) {
 
   advanceContent(slide, event);
 
-  if (event.fragment.hasAttribute('data-set-window')) {
-    advanceSetWindow(slide, event);
+  if (event.fragment.hasAttribute('data-set-groups')) {
+    // TODO
+  }
+
+  if (event.fragment.hasAttribute('data-select-items')) {
+    advanceSelectItems(slide, event);
   }
 
   if (event.fragment.hasAttribute('data-move-to-date')) {
@@ -55,8 +76,8 @@ function advanceTimelineChart(event) {
     advanceFit(slide, event);
   }
 
-  if (event.fragment.hasAttribute('data-select-items')) {
-    advanceSelectItems(slide, event);
+  if (event.fragment.hasAttribute('data-set-window')) {
+    advanceSetWindow(slide, event);
   }
 }
 
@@ -89,8 +110,9 @@ function advanceContent(slide, event) {
 
 function retreatContent(slide, event) {
   var content_div = slide.getElementsByClassName('timeline-content')[0];
+  var first_fragment = slide.getElementsByClassName('timeline fragment')[0];
 
-  if (event.fragment.dataset.fragmentIndex == 0) {
+  if (event.fragment.dataset.fragmentIndex == first_fragment.dataset.fragmentIndex) {
     content_div.innerHTML = '';
   } else {
     var previous_index = event.fragment.dataset.fragmentIndex - 1; 
@@ -115,7 +137,10 @@ function retreatSetWindow(slide, event) {
 function advanceMoveToDate(slide, event) {
   event.fragment.previous_date = slide.timeline.getWindow();
 
-  slide.timeline.moveTo(event.fragment.dataset.moveToDate);
+  var options = getAnimation(event);
+
+  slide.timeline.moveTo(event.fragment.dataset.moveToDate,
+                        options);
 }
 
 function retreatMoveToDate(slide, event) {
@@ -162,4 +187,13 @@ function getIds(value) {
   return value.split(',').map(function (value) {
     return value.trim();
   });
+}
+
+function getAnimation(event) {
+  if (event.fragment.hasAttribute('data-animation')) {
+    return {animation: {duration: event.fragment.dataset.animation,
+                        eastingFunction: 'linear'}};
+  } else {
+    return {};
+  }
 }
